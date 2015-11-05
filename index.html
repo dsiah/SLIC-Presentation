@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>SLIC Presentation</title>
+
+		<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+		<meta name="author" content="Hakim El Hattab">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/sky.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+				<section>
+					<h2>SLIC Superpixels</h2>
+					<p>
+					Radhakrishna Achanta, Appu Shaji, Kevin Smith, Aurelien Lucchi, Pascal Fua, and Sabine Susstrunk
+					</p>
+					<p>
+						<small>Presented by David Siah</small>
+					</p>
+				</section>
+
+					
+				<section>
+					<h2>Abstract</h2>
+					<p>
+						<strong>Superpixels</strong>  <small>A polygonal part of a digital image, larger than a normal pixel, that is rendered in the same colour and brightness (wiki)</small>
+					</p>
+					
+					<p>In this paper 5 Superpixel algorithms are compared</p>
+					<ul>
+						<li>Image Boundary Adherence</li>
+						<li>Speed</li>
+						<li>Memory efficiency</li>
+						<li>Segmentation performance</li>
+					</ul>
+
+					
+				</section>
+
+				<section>
+					<h2>2 Types of Methods</h2>
+					<ol>
+						<li>Graph-based Algorithms</li>
+						<li>Gradient Ascent Algorithms</li>
+					</ol>
+				</section>
+
+				<section id="transitions">
+					<h2>Methods in comparison</h2>
+					<table>
+						<thead>
+							<tr>
+								<th>Name</th>
+								<th>Type</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>NC05 - Normalized Cuts</td>
+								<td>Graph</td>
+							</tr>
+							<tr>
+								<td>GS04 Minimum Spanning Tree</td>
+								<td>Graph</td>
+							</tr>
+							<tr>
+								<td>SL08 - Seam Carving</td>
+								<td>Graph</td>
+							</tr>
+							<tr>
+								<td>GCa10 and GCb10 - Texture</td>
+								<td>Graph</td>
+							</tr>
+							<tr>
+								<td>MS02 - Mean-shift</td>
+								<td>Gradient Ascent</td>
+							</tr>
+							<tr>
+								<td>QS08 - Quick Shift</td>
+								<td>Gradient Ascent</td>
+							</tr>
+							<tr>
+								<td>WS91 - Watershed</td>
+								<td>Gradient Ascent</td>
+							</tr>
+						</tbody>
+					</table>
+
+				</section>
+
+				<section>
+					<h2>Introducing SLIC</h2>
+					<p>
+						<small>Adapting k-means clustering to efficiently generate superpixels</small>
+					</p>
+					<img src="http://ivrlwww.epfl.ch/supplementary_material/RK_SLICSuperpixels/comparison/bound_lk/118035.jpg">
+
+					<p>
+						<small>It's simple (kinda)</small>
+					</p>
+				</section>
+
+				<section>
+					<h2>But First</h2>
+					<p>
+						What is Gradient Ascent / Descent?
+						<iframe width="700" height="400" src="https://www.youtube.com/embed/5u0jaA3qAGk" frameborder="0" allowfullscreen></iframe>
+					</p>
+				</section>
+				
+				<section data-background="#b5533c">
+					<img src="https://dl.dropboxusercontent.com/u/45750707/SLICAlg.png" height="600">
+					<p><small>we'll revisit this</small></p>
+				</section>
+
+				<section>
+					<h2>SLIC generation</h2>
+					<iframe width="700" height="400" src="https://www.youtube.com/embed/TGaNGktTlhQ" frameborder="0" allowfullscreen></iframe>
+				</section>
+
+				<section>
+					<h2>Inputs</h2>
+					<p>only parameter of the algorithm is <strong>k</strong>, </p>
+					<p>the desired number of approximately equally-sized superpixels</p>
+					<img src="https://upload.wikimedia.org/wikipedia/commons/3/3d/Rosa_Gold_Glow_2_small_noblue_color_space.png" height="300" width="300">
+					<p><small>K-means example (with Voronoi)</small></p>
+				</section>
+
+				<section>
+					<h2>Sampling</h2>
+					<p>
+						Sampled on a regular grid spaced S pixels apart.
+						<img src="https://dl.dropboxusercontent.com/u/45750707/kmeans.png">
+					</p>
+				</section>
+
+				<section>
+					<h2>Distance</h2>
+					<p> There are problems with calculating euclidean distance </p>
+					<p>
+						<small> Simply defining D to be the five-dimenensional Euclidean distance in labxy space will cause inconsistencies in clustering behavior for different superpixel sizes </small>
+
+					</p>
+					<img src="https://dl.dropboxusercontent.com/u/45750707/distance.png">
+					<p><small><i>the N values are the maximum distance which will normalize these measurements </i></small></p>
+				</section>
+
+				<section data-background="#b5533c">
+					<img src="https://dl.dropboxusercontent.com/u/45750707/SLICAlg.png" height="600">
+					<p><small>and we're back</small></p>
+				</section>
+
+				<section>
+					<h2>Post Processing</h2>
+					<p><small><i>Small problem: rogue pixels that are not connected may remain </small></i></p>
+					<p><strong> Solution: </strong> use connected components algorithm to reassign them to closer clusters</p>
+				</section>
+
+				<section>
+					<h2>What is this good for?</h2>
+					<iframe src="https://player.vimeo.com/video/62038844" width="700" height="400" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe>
+				</section>
+
+
+				<section data-state="customevent">
+					<section>
+					<h2>Comparison</h2>
+					<p>
+						<small>Remember those other algorithms?</small>
+
+					</p>
+					</section>
+					<section>
+						<h2>Subject Comparison</h2>
+						<img src="https://dl.dropboxusercontent.com/u/45750707/SubjectComparison.png">
+					</section>
+
+					<section>
+						<h2>Efficiency Comparison</h2>
+						<img src="https://dl.dropboxusercontent.com/u/45750707/ComparingO.png">
+					</section>
+
+					</section>
+				</section>
+
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true },
+					{ src: 'plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
